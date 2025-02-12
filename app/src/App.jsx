@@ -1,51 +1,35 @@
-import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import axios from "axios"
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Route, Routes } from 'react-router-dom'
+import Navbar from './components/navbar/Navbar'
+import Films from './pages/Films'
+import Customers from './pages/Customers'
+import Top5Films from './data/top5/Top5Films';
+import Top5Actors from './data/top5/Top5Actors';
 
-function App() {
-  const [count, setCount] = useState(0)
-  const [array, setArray] = useState([]);
-
-  const fetchAPI = async () => {
-    const response = await axios.get("http://127.0.0.1:8080/api/users");
-    setArray(response.data.users);
-  };
-
-  useEffect(() => {
-    fetchAPI()
-  }, [])
-
-
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-          {
-            array.map((user, index) => (
-              <p key={index}>
-              <span>{user}</span>
-              <br></br>
-              </p>
-            ))
-          }
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <Navbar />
+      {/* <div className="container">
+        <Routes>
+          <Route path="/app" elements={<App/>}></Route>
+          <Route path="/films" elements={<Films/>}></Route>
+          <Route path="/customers" elements={<Customers/>}></Route>
+        </Routes>
+      </div> */}
+      
+      <Top5Films/>
+      <Top5Actors/>
+{/*       
+      {films.map((film) => (
+        <div key={film.film_id}>
+          <h3>{film.title}</h3>
+        </div>
+      ))} */}
+
+
+    </div>
   )
 }
 
