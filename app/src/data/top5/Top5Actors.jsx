@@ -1,4 +1,4 @@
-import Modal from '../../components/navbar/modal/Modal';
+import Modal from '../../components/modal/Modal';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -11,7 +11,7 @@ const Top5Actors = () => {
     ;(async () => {
       const response = await axios.get("http://127.0.0.1:8080/top/actors")
       setActors(response.data)
-      console.log(response.data)
+      // console.log(response.data)
     })()
   }, [])
 
@@ -20,7 +20,7 @@ const Top5Actors = () => {
     try {
       const response = await axios.post(`http://127.0.0.1:8080/details/actor`, {actor_id});
       setSelectedActor(response.data); // Store the actor details
-      // console.log(selectedActor)
+      // console.log(response.data)
 
     } catch (error) {
       console.error('Error fetching film details:', error);
@@ -57,11 +57,11 @@ const Top5Actors = () => {
             <h2>{selectedActor[0].first_name} {selectedActor[0].last_name}'s Top 5 Films</h2>
             {/* <p>Actor ID: {selectedActor[0].actor_id}</p>
             <p>Last Update: {selectedActor[0].last_update}</p> */}
-            <p>1. {selectedActor[0].title}</p>
-            <p>2. {selectedActor[1].title}</p>
-            <p>3. {selectedActor[2].title}</p>
-            <p>4. {selectedActor[3].title}</p>
-            <p>5. {selectedActor[4].title}</p>
+            <p>1. {selectedActor[0].title}: {selectedActor[0].rental_count} rented</p>
+            <p>2. {selectedActor[1].title} {selectedActor[1].rental_count} rented</p>
+            <p>3. {selectedActor[2].title} {selectedActor[2].rental_count} rented</p>
+            <p>4. {selectedActor[3].title} {selectedActor[3].rental_count} rented</p>
+            <p>5. {selectedActor[4].title} {selectedActor[4].rental_count} rented</p>
             <h3></h3>
           </div>
         ) 
