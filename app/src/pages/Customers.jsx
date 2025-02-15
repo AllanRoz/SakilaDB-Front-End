@@ -11,7 +11,7 @@ const Customers = () => {
       setCustomers(response.data)
     })()
   }, [])
-  console.log(customers)
+  // console.log(customers)
   return (
     <div>
       <Pagination items={customers} itemsPerPage={20}/>

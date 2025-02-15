@@ -14,19 +14,27 @@ function Pagination({ items, itemsPerPage }) {
         <table>
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Customer ID</th>
+            <th>Store ID</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
+            <th>Active</th>
+            <th>Create Date</th>
+            <th>Last Update</th>
           </tr>
         </thead>
         <tbody>
             {currentItems.map((item) => (
           <tr key={item.customer_id}>
           <td>{item.customer_id}</td>
+          <td>{item.store_id}</td>
           <td>{item.first_name}</td>
           <td>{item.last_name}</td>
           <td>{item.email}</td>
+          <td>{item.active}</td>
+          <td>{item.create_date}</td>
+          <td>{item.last_update}</td>
         </tr>
         ))}
         </tbody>
