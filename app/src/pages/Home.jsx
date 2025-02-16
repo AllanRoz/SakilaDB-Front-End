@@ -1,6 +1,6 @@
 import React from 'react'
-import Top5Films from '../data/top5/Top5Films';
-import Top5Actors from '../data/top5/Top5Actors';
+import Top5Films from '../tables/Top5Films';
+import Top5Actors from '../tables/Top5Actors';
 
 export const Home = () => {
   return (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Pagination from '../components/pagination/Pagination';
+import CustomersData from '../tables/CustomersData';
 
 const Customers = () => {
   const [customers, setCustomers] = useState([])
@@ -14,7 +14,7 @@ const Customers = () => {
   // console.log(customers)
   return (
     <div>
-      <Pagination items={customers} itemsPerPage={20}/>
+      <CustomersData items={customers} itemsPerPage={10}/>
     </div>
   )
 }

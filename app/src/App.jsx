@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Route, Routes } from 'react-router-dom'
 import Navbar from './components/navbar/Navbar'
 import { Home } from './pages/Home';
 import Films from './pages/Films'
 import Customers from './pages/Customers'
-import Top5Films from './data/top5/Top5Films';
-import Top5Actors from './data/top5/Top5Actors';
+import "bootstrap/dist/css/bootstrap.min.css";
+
 
 const App = () => {
   return (

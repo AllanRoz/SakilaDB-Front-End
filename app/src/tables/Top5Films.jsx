@@ -1,6 +1,7 @@
-import Modal from '../../components/modal/Modal';
+import Modal from '../components/modal/Modal';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+
 
 const BUTTON_WRAPPER_STYLES = {
   position: 'relative',
@@ -36,12 +37,12 @@ const Top5Films = () => {
     }
     setIsOpen(true);
   };
-  console.log(selectedFilm)
+  // console.log(selectedFilm)
 
   return (
     <div>
       <h2>Top 5 Films</h2>
-      <table>
+      <table className="table">
         <thead>
           <tr>
             <th>ID</th>

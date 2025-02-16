@@ -1,6 +1,7 @@
-import Modal from '../../components/modal/Modal';
+import Modal from '../components/modal/Modal';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+
 
 const Top5Actors = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -32,7 +33,7 @@ const Top5Actors = () => {
   return (
     <div>
       <h2>Top 5 Actor</h2>
-      <table>
+      <table className="table">
         <thead>
             <tr>
             <th>ID</th>
