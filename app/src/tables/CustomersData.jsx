@@ -3,10 +3,10 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from '../components/modal/Modal';
-import './CustomersData.css'
+import './Dropdown.css'
 
 
-function Customers({ items, itemsPerPage }) {
+function CustomersData({ items, itemsPerPage }) {
   const [currentPage, setCurrentPage] = useState(1);
   const maxPage = Math.ceil(items.length / itemsPerPage);
   const [search, setSearch] = useState('');
@@ -23,7 +23,7 @@ function Customers({ items, itemsPerPage }) {
     } else if (filterChoice === 'lastName') {
       return search.toLowerCase() === '' || item.last_name.toLowerCase().includes(search.toLowerCase());
     }
-    return true; // Default case: return all items if no filter is selected
+    return true;
   };
   
 
@@ -35,7 +35,7 @@ function Customers({ items, itemsPerPage }) {
     <div>
         <Dropdown>
           <Dropdown.Toggle variant="success" id="dropdown-basic">
-            Search Filter: {filterChoice || "Select"}
+            Search Filter: {filterChoice || "None"}
           </Dropdown.Toggle>
           <Dropdown.Menu>
             <Dropdown.Item onClick={() => setFilterChoice("customerID")}>
@@ -124,4 +124,4 @@ function Customers({ items, itemsPerPage }) {
   );
 }
 
-export default Customers;
+export default CustomersData;

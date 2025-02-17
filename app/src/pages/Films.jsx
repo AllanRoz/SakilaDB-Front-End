@@ -1,27 +1,22 @@
-import React, { useState } from "react";
-import Dropdown from "react-bootstrap/Dropdown";
+import React, { useState, useEffect } from "react";
+import FilmsData from '../tables/FilmsData';
+import axios from 'axios';
 
 const Films = () => {
-  const [filterChoice, setFilterChoice] = useState("");
+  const [films, setFilms] = useState([])
 
+  useEffect(() => {
+    ;(async () => {
+      const response = await axios.get("http://127.0.0.1:8080/films")
+      setFilms(response.data)
+    })()
+  }, [])
+  // console.log(films)
   return (
-    <Dropdown>
-      <Dropdown.Toggle variant="success" id="dropdown-basic">
-        Search Filter: {filterChoice || "Select"}
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-        <Dropdown.Item onClick={() => setFilterChoice("customerID")}>
-          Customer ID
-        </Dropdown.Item>
-        <Dropdown.Item onClick={() => setFilterChoice("firstName")}>
-          First Name
-        </Dropdown.Item>
-        <Dropdown.Item onClick={() => setFilterChoice("lastName")}>
-          Last Name
-        </Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
-  );
+    <div>
+      <FilmsData items={films} itemsPerPage={10}/>
+    </div>
+  )
 }
 
 

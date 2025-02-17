@@ -19,7 +19,7 @@ const Top5Actors = () => {
   const handleRowClick = async (actor_id) => {
     // console.log('Fetching details for Actor ID:', actor_id);
     try {
-      const response = await axios.post(`http://127.0.0.1:8080/details/actor`, {actor_id});
+      const response = await axios.post(`http://127.0.0.1:8080/details/top5actors`, {actor_id});
       setSelectedActor(response.data); // Store the actor details
       // console.log(response.data)
 
@@ -59,10 +59,10 @@ const Top5Actors = () => {
             {/* <p>Actor ID: {selectedActor[0].actor_id}</p>
             <p>Last Update: {selectedActor[0].last_update}</p> */}
             <p>1. {selectedActor[0].title}: {selectedActor[0].rental_count} rented</p>
-            <p>2. {selectedActor[1].title} {selectedActor[1].rental_count} rented</p>
-            <p>3. {selectedActor[2].title} {selectedActor[2].rental_count} rented</p>
-            <p>4. {selectedActor[3].title} {selectedActor[3].rental_count} rented</p>
-            <p>5. {selectedActor[4].title} {selectedActor[4].rental_count} rented</p>
+            <p>2. {selectedActor[1].title}: {selectedActor[1].rental_count} rented</p>
+            <p>3. {selectedActor[2].title}: {selectedActor[2].rental_count} rented</p>
+            <p>4. {selectedActor[3].title}: {selectedActor[3].rental_count} rented</p>
+            <p>5. {selectedActor[4].title}: {selectedActor[4].rental_count} rented</p>
             <h3></h3>
           </div>
         ) 

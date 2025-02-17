@@ -30,7 +30,7 @@ const Top5Films = () => {
   const handleRowClick = async (film_id) => {
     //console.log('Fetching details for Film ID:', film_id);
     try {
-      const response = await axios.post(`http://127.0.0.1:8080/details/film`, {film_id});
+      const response = await axios.post(`http://127.0.0.1:8080/details/top5films`, {film_id});
       setSelectedFilm(response.data[0]); // Store the film details
     } catch (error) {
       console.error('Error fetching film details:', error);
