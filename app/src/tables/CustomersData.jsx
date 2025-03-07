@@ -3,6 +3,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from '../components/modal/Modal';
+import axios from 'axios';
+
 import './Dropdown.css'
 
 
@@ -12,6 +14,12 @@ function CustomersData({ items, itemsPerPage }) {
   const [search, setSearch] = useState('');
   const [filterChoice, setFilterChoice] = useState('');
   const [isOpen, setIsOpen] = useState(false)
+  const [isCustomerOpen, setIsCustomerOpen] = useState(false) // Customer Details
+  const [isCustomerEditOpen, setIsCustomerEditOpen] = useState(false) // Customer Edit 
+  const [isAddCustomerOpen, setIsAddCustomerOpen] = useState(false) // Adding Customer
+  const [customerData, setCustomerData] = useState(null); 
+  
+
   // console.log(search)
   // console.log(filterChoice)
 
@@ -31,6 +39,28 @@ function CustomersData({ items, itemsPerPage }) {
     .filter(searchChoice) // Apply filtering before pagination
     .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+  const handleRowClick = async (customer_id, open) => {
+    //console.log('Fetching details for Film ID:', film_id);
+    try {
+      console.log(customer_id)
+      if(open === "CustomerDetails"){
+        console.log("Customer Details");
+        const response = await axios.post(`http://127.0.0.1:8080/details/customerdata`, {customer_id});
+        setCustomerData(response.data[0]); // Store the film details
+        setIsCustomerOpen(true);
+      }
+      else if(open === "CustomerEdit"){
+        console.log("Customer Edit");
+      }
+      else if(open === "CustomerDelete"){
+        console.log("Customer Delete");
+      }
+    } catch (error) {
+      console.error('Error fetching film details:', error);
+    }
+    // setIsCustomerOpen(true);
+  };
+  
   return (
     <div>
         <Dropdown>
@@ -60,21 +90,21 @@ function CustomersData({ items, itemsPerPage }) {
             <th>Last Name</th>
             <th>Email</th>
             <th>Active</th>
-            <th>Create Date</th>
-            <th>Last Update</th>
+            <th>Edit</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
             {currentItems.map((item) => (
-          <tr key={item.customer_id}>
+          <tr key={item.customer_id} onClick={() => handleRowClick(item.customer_id, "CustomerDetails")} style={{ cursor: 'pointer' }}>
           <td>{item.customer_id}</td>
           <td>{item.store_id}</td>
           <td>{item.first_name}</td>
           <td>{item.last_name}</td>
           <td>{item.email}</td>
           <td>{item.active}</td>
-          <td>{item.create_date}</td>
-          <td>{item.last_update}</td>
+          <td><button type="button" className="btn btn-secondary" onClick={(e) => {e.stopPropagation(); handleRowClick(item.customer_id, "CustomerEdit")}} style={{ cursor: 'pointer' }}>Edit</button></td>
+          <td><button type="button" className="btn btn-danger" onClick={(e) => {e.stopPropagation(); handleRowClick(item.customer_id, "CustomerDelete")}} style={{ cursor: 'pointer' }}>Delete</button></td>
         </tr>
         ))}
         </tbody>
@@ -95,7 +125,26 @@ function CustomersData({ items, itemsPerPage }) {
         Next
       </button>
       <br></br>
-      <Modal open={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal open={isCustomerOpen} onClose={() => setIsCustomerOpen(false)}>
+        {customerData ? (
+          <div>
+            <h2>{customerData.first_name} {customerData.last_name}'s Information</h2>
+            <p>Customer ID: {customerData.customer_id}</p>
+            <p>Email: {customerData.email}</p>
+            <p>Address:</p>
+            <p>{customerData.address}</p>
+            <p>{customerData.city}, {customerData.district}, {customerData.postal_code}, {customerData.country}</p>
+            <p>Phone Number: {customerData.phone}</p>
+            <p>Currently Renting: {customerData.renting}</p>
+            <p>Previously Rented: {customerData.rented}</p>
+            <p>Created: {customerData.create_date}</p>
+            <p>Last Updated: {customerData.last_update}</p>
+          </div>
+        ) : (
+          <p>Loading...</p>
+        )}
+      </Modal>
+      <Modal open={isAddCustomerOpen} onClose={() => setIsAddCustomerOpen(false)}>
         <h2>Create new Customer</h2>
         <Form>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
