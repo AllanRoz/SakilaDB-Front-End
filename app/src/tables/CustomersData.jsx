@@ -157,8 +157,6 @@ function CustomersData({ items, itemsPerPage }) {
             <p>Currently Renting: {customerData.renting}</p>
             <p>Created: {customerData.create_date}</p>
             <p>Last Updated: {customerData.last_update}</p>
-            {/* <input type={"text"} id={"returnFilm"} value={filmId} onChange={(e) => setFilmId(e.target.value)} placeholder="Enter Film ID"></input>
-            <button type="button" className="btn btn-primary" onClick={(e) => {e.stopPropagation(); returnFilm(customerData.customer_id, filmId)}} style={{ cursor: 'pointer' }}>Return Film</button> */}
             <ReturnFilmButton customerData={customerData} />
           </div>
         ) : (
@@ -170,23 +168,48 @@ function CustomersData({ items, itemsPerPage }) {
         <Form>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>First Name</Form.Label>
-            <Form.Control type="email" placeholder="John" />
+            <Form.Control type="text" placeholder="John" />
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>Last Name</Form.Label>
-            <Form.Control type="email" placeholder="Doe" />
+            <Form.Control type="text" placeholder="Doe" />
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>Email address</Form.Label>
             <Form.Control type="email" placeholder="name@example.com" />
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control type="email" placeholder="name@example.com" />
+            <Form.Label>Address</Form.Label>
+            <Form.Control type="text" placeholder="123 Park Lane" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>Address Line 2</Form.Label>
+            <Form.Control type="text" placeholder="Optional" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>City</Form.Label>
+            <Form.Control type="text" placeholder="Jersey City" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>District</Form.Label>
+            <Form.Control type="text" placeholder="New Jersey" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>Postal Code</Form.Label>
+            <Form.Control type="text" placeholder="07306" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>Country</Form.Label>
+            <Form.Control type="text" placeholder="USA" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>Phone Number</Form.Label>
+            <Form.Control type="text" placeholder="1234567890" />
           </Form.Group>
         </Form>
+        
       </Modal>
-      <Button variant="primary" id="addCustomer" onClick={() => setIsOpen(true)}>
+      <Button variant="primary" id="addCustomer" onClick={() => setIsAddCustomerOpen(true)}>
         Add new customer
       </Button>
 

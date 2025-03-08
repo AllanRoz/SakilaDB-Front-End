@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from '../components/modal/Modal';
+import RentFilmButton from '../components/button/RentFilmButton';
 import './Dropdown.css'
 
 
@@ -25,9 +26,6 @@ function FilmsData({ items, itemsPerPage }) {
     } else if (filterChoice === 'genre') {
       return search.toLowerCase() === '' || item.genres.toLowerCase().includes(search.toLowerCase());
     }
-    // else if (filterChoice === 'none'){
-    //     setSearch('');
-    // }
     return true;
   };
   
@@ -119,6 +117,7 @@ function FilmsData({ items, itemsPerPage }) {
             <p>Rental Rate: ${filmData.rental_rate}</p>
             <p>Replacement Cost: ${filmData.replacement_cost}</p>
             <p>Last Update: {filmData.last_update}</p>
+            <RentFilmButton filmID={filmData.film_id}/>
           </div>
         ) : (
           <p>Loading...</p>

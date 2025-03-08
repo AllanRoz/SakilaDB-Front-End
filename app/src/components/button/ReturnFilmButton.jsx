@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const ReturnFilmButton = ({ customerData }) => {
-    const [filmId, setFilmId] = useState(""); // Track the film_id
+    const [filmId, setFilmId] = useState("");
     const [messageVisible, setMessageVisible] = useState(false);
-    const [errorMessageVisible, setErrorMessageVisible] = useState(false); // State for error message
+    const [errorMessageVisible, setErrorMessageVisible] = useState(false); 
 
-    // Function to handle film return
     const returnFilm = async (customerId, filmId) => {
         console.log(customerId);
         console.log(filmId);
@@ -17,24 +16,22 @@ const ReturnFilmButton = ({ customerData }) => {
             });
 
             console.log(response.data);
-            // Check if the response indicates success
             if (response.data.message === "Film returned") {
                 setMessageVisible(true);
-                setErrorMessageVisible(false); // Hide error message
+                setErrorMessageVisible(false);
                 setTimeout(() => {
-                    setMessageVisible(false); // Hide success message after 3 seconds
+                    setMessageVisible(false);
                 }, 2000);
             } else {
-                setErrorMessageVisible(true); // Show error message if film wasn't returned
-                setMessageVisible(false); // Hide success message if it failed
+                setErrorMessageVisible(true); 
+                setMessageVisible(false);
                 setTimeout(() => {
-                    setErrorMessageVisible(false); // Hide success message after 3 seconds
+                    setErrorMessageVisible(false);
                 }, 2000);
             }
         } catch (error) {
-            // console.error("Error during return:", error);
-            setErrorMessageVisible(true); // Show error message in case of exception
-            setMessageVisible(false); // Hide success message if it failed
+            setErrorMessageVisible(true);
+            setMessageVisible(false);
         }
     };
 
@@ -45,7 +42,7 @@ const ReturnFilmButton = ({ customerData }) => {
                 type="text"
                 id="returnFilm"
                 value={filmId}
-                onChange={(e) => setFilmId(e.target.value)} // Update state with input value
+                onChange={(e) => setFilmId(e.target.value)}
             />
 
             <button
@@ -53,7 +50,7 @@ const ReturnFilmButton = ({ customerData }) => {
                 className="btn btn-primary"
                 onClick={(e) => {
                     e.stopPropagation();
-                    returnFilm(customerData.customer_id, filmId); // Pass customer_id and film_id
+                    returnFilm(customerData.customer_id, filmId);
                 }}
                 style={{ cursor: "pointer" }}
             >
@@ -61,13 +58,13 @@ const ReturnFilmButton = ({ customerData }) => {
             </button>
             {messageVisible && (
                 <div style={{ color: "green", fontWeight: "bold" }}>
-                    Film has been returned successfully!
+                    Film has been returned
                 </div>
             )}
 
             {errorMessageVisible && (
                 <div style={{ color: "red", fontWeight: "bold" }}>
-                    Error: Film could not be returned. Please try again.
+                    Error: Film could not be returned. Please try again
                 </div>
             )}
         </div>
