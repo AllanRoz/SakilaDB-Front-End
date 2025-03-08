@@ -3,6 +3,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from '../components/modal/Modal';
+import ReturnFilmButton from '../components/button/ReturnFilmButton';
 import axios from 'axios';
 
 import './Dropdown.css'
@@ -18,6 +19,8 @@ function CustomersData({ items, itemsPerPage }) {
   const [isCustomerEditOpen, setIsCustomerEditOpen] = useState(false) // Customer Edit 
   const [isAddCustomerOpen, setIsAddCustomerOpen] = useState(false) // Adding Customer
   const [customerData, setCustomerData] = useState(null); 
+  const [filmId, setFilmId] = useState('');
+
   
 
   // console.log(search)
@@ -58,7 +61,22 @@ function CustomersData({ items, itemsPerPage }) {
     } catch (error) {
       console.error('Error fetching film details:', error);
     }
-    // setIsCustomerOpen(true);
+  };
+
+  const returnFilm = async (customerId, filmId) => {
+    //console.log('Fetching details for Film ID:', film_id);
+    try {
+      console.log(customerId)
+      console.log("Return Film");
+      const post = await axios.post(`http://127.0.0.1:8080/returnFilm`, {
+        customer_id: customerId,
+        film_id: filmId
+      });
+      console.log(post.data);
+      
+    } catch (error) {
+      console.error('Error fetching film details:', error);
+    }
   };
   
   return (
@@ -125,7 +143,7 @@ function CustomersData({ items, itemsPerPage }) {
         Next
       </button>
       <br></br>
-      <Modal open={isCustomerOpen} onClose={() => setIsCustomerOpen(false)}>
+      <Modal open={isCustomerOpen} onClose={() => {setIsCustomerOpen(false), setFilmId('')}}>
         {customerData ? (
           <div>
             <h2>{customerData.first_name} {customerData.last_name}'s Information</h2>
@@ -135,10 +153,13 @@ function CustomersData({ items, itemsPerPage }) {
             <p>{customerData.address}</p>
             <p>{customerData.city}, {customerData.district}, {customerData.postal_code}, {customerData.country}</p>
             <p>Phone Number: {customerData.phone}</p>
-            <p>Currently Renting: {customerData.renting}</p>
             <p>Previously Rented: {customerData.rented}</p>
+            <p>Currently Renting: {customerData.renting}</p>
             <p>Created: {customerData.create_date}</p>
             <p>Last Updated: {customerData.last_update}</p>
+            {/* <input type={"text"} id={"returnFilm"} value={filmId} onChange={(e) => setFilmId(e.target.value)} placeholder="Enter Film ID"></input>
+            <button type="button" className="btn btn-primary" onClick={(e) => {e.stopPropagation(); returnFilm(customerData.customer_id, filmId)}} style={{ cursor: 'pointer' }}>Return Film</button> */}
+            <ReturnFilmButton customerData={customerData} />
           </div>
         ) : (
           <p>Loading...</p>
