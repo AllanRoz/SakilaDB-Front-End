@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import Modal from '../components/modal/Modal';
 import ReturnFilmButton from '../components/button/ReturnFilmButton';
+import AddCustomerButton from '../components/button/AddCustomerButton';
+import EditButton from '../components/button/EditButton';
+import DeleteButton from '../components/button/DeleteButton';
 import axios from 'axios';
 
 import './Dropdown.css'
@@ -21,40 +23,6 @@ function CustomersData({ items, itemsPerPage }) {
   const [customerData, setCustomerData] = useState(null); 
   const [filmId, setFilmId] = useState('');
 
-  // Customer form state
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
-  const [address2, setAddress2] = useState('');
-  const [city, setCity] = useState('');
-  const [district, setDistrict] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [country, setCountry] = useState('');
-  const [phone, setPhone] = useState('');
-
-  const handleAddCustomer = async () => {
-    try {
-      const response = await axios.post('http://127.0.0.1:8080/customer/add', {
-        first_name: firstName,
-        last_name: lastName,
-        email: email,
-        address: address,
-        address2: address2,
-        district: district,
-        city: city,
-        postal_code: postalCode,
-        country: country,
-        phone: phone,
-      });
-      // console.log('Customer added successfully:', response.data);
-      console.log(response.data);
-      setIsAddCustomerOpen(false); // Close modal after submission
-    } catch (error) {
-      console.error('Error adding customer:', error);
-    }
-  };
-
   // console.log(search)
   // console.log(filterChoice)
 
@@ -71,7 +39,7 @@ function CustomersData({ items, itemsPerPage }) {
   
 
   const currentItems = items
-    .filter(searchChoice) // Apply filtering before pagination
+    .filter(searchChoice)
     .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleRowClick = async (customer_id, open) => {
@@ -81,31 +49,16 @@ function CustomersData({ items, itemsPerPage }) {
       if(open === "CustomerDetails"){
         console.log("Customer Details");
         const response = await axios.post(`http://127.0.0.1:8080/details/customerdata`, {customer_id});
-        setCustomerData(response.data[0]); // Store the film details
+        setCustomerData(response.data[0]);
         setIsCustomerOpen(true);
       }
       else if(open === "CustomerEdit"){
         console.log("Customer Edit");
+        // <EditButton customer_id={customer_id}/>
       }
       else if(open === "CustomerDelete"){
         console.log("Customer Delete");
       }
-    } catch (error) {
-      console.error('Error fetching film details:', error);
-    }
-  };
-
-  const returnFilm = async (customerId, filmId) => {
-    //console.log('Fetching details for Film ID:', film_id);
-    try {
-      console.log(customerId)
-      console.log("Return Film");
-      const post = await axios.post(`http://127.0.0.1:8080/returnFilm`, {
-        customer_id: customerId,
-        film_id: filmId
-      });
-      console.log(post.data);
-      
     } catch (error) {
       console.error('Error fetching film details:', error);
     }
@@ -146,15 +99,15 @@ function CustomersData({ items, itemsPerPage }) {
         </thead>
         <tbody>
             {currentItems.map((item) => (
-          <tr key={item.customer_id} onClick={() => handleRowClick(item.customer_id, "CustomerDetails")} style={{ cursor: 'pointer' }}>
+          <tr key={item.customer_id} onClick={(e) => handleRowClick(item.customer_id, "CustomerDetails")} style={{ cursor: 'pointer' }}>
           <td>{item.customer_id}</td>
           <td>{item.store_id}</td>
           <td>{item.first_name}</td>
           <td>{item.last_name}</td>
           <td>{item.email}</td>
           <td>{item.active}</td>
-          <td><button type="button" className="btn btn-secondary" onClick={(e) => {e.stopPropagation(); handleRowClick(item.customer_id, "CustomerEdit")}} style={{ cursor: 'pointer' }}>Edit</button></td>
-          <td><button type="button" className="btn btn-danger" onClick={(e) => {e.stopPropagation(); handleRowClick(item.customer_id, "CustomerDelete")}} style={{ cursor: 'pointer' }}>Delete</button></td>
+          <td onClick={(e) => e.stopPropagation()}><EditButton customer_id={item.customer_id}/></td>
+          <td><DeleteButton customer_id={item.customer_id}/></td>
         </tr>
         ))}
         </tbody>
@@ -195,107 +148,7 @@ function CustomersData({ items, itemsPerPage }) {
           <p>Loading...</p>
         )}
       </Modal>
-      <Modal open={isAddCustomerOpen} onClose={() => setIsAddCustomerOpen(false)}>
-        <h2>Create new Customer</h2>
-        <Form>
-          <Form.Group className="mb-3" controlId="firstName">
-            <Form.Label>First Name</Form.Label>
-            <Form.Control 
-              type="text" 
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)} 
-              placeholder="John" 
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="lastName">
-            <Form.Label>Last Name</Form.Label>
-            <Form.Control 
-              type="text" 
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)} 
-              placeholder="Doe" 
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="email">
-            <Form.Label>Email Address</Form.Label>
-            <Form.Control 
-              type="email" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)} 
-              placeholder="name@example.com" 
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="address">
-            <Form.Label>Address</Form.Label>
-            <Form.Control 
-              type="text" 
-              value={address}
-              onChange={(e) => setAddress(e.target.value)} 
-              placeholder="123 Park Lane" 
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="address2">
-            <Form.Label>Address Line 2</Form.Label>
-            <Form.Control 
-              type="text" 
-              value={address2}
-              onChange={(e) => setAddress2(e.target.value)} 
-              placeholder="Optional" 
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="city">
-            <Form.Label>City</Form.Label>
-            <Form.Control 
-              type="text" 
-              value={city}
-              onChange={(e) => setCity(e.target.value)} 
-              placeholder="Jersey City" 
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="district">
-            <Form.Label>District</Form.Label>
-            <Form.Control 
-              type="text" 
-              value={district}
-              onChange={(e) => setDistrict(e.target.value)} 
-              placeholder="New Jersey" 
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="postalCode">
-            <Form.Label>Postal Code</Form.Label>
-            <Form.Control 
-              type="text" 
-              value={postalCode}
-              onChange={(e) => setPostalCode(e.target.value)} 
-              placeholder="07306" 
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="country">
-            <Form.Label>Country</Form.Label>
-            <Form.Control 
-              type="text" 
-              value={country}
-              onChange={(e) => setCountry(e.target.value)} 
-              placeholder="USA" 
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="phone">
-            <Form.Label>Phone Number</Form.Label>
-            <Form.Control 
-              type="text" 
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)} 
-              placeholder="1234567890" 
-            />
-          </Form.Group>
-          <Button variant="primary" onClick={handleAddCustomer}>
-            Submit
-          </Button>
-        </Form>
-      </Modal>
-      <Button variant="primary" id="addCustomer" onClick={() => setIsAddCustomerOpen(true)}>
-        Add new customer
-      </Button>
+      <AddCustomerButton />
 
     </div>
   );

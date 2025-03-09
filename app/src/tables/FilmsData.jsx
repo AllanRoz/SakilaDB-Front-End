@@ -78,7 +78,7 @@ function FilmsData({ items, itemsPerPage }) {
         </thead>
         <tbody>
             {currentItems.map((item) => (
-          <tr key={item.film_id} onClick={() => handleRowClick(item.film_id)} style={{ cursor: 'pointer' }}>
+          <tr key={item.film_id} onClick={() => handleRowClick(item.film_id)} style={{ cursor: 'default' }}>
           <td>{item.film_id}</td>
           <td>{item.film_title}</td>
           <td>{item.genres}</td>

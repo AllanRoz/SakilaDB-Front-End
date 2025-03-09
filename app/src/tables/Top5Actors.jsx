@@ -43,7 +43,7 @@ const Top5Actors = () => {
         </thead>
         <tbody>
           {actors.map((actor) => (
-          <tr key={actor.actor_id} onClick={() => handleRowClick(actor.actor_id)} style={{ cursor: 'pointer' }}>
+          <tr key={actor.actor_id} onClick={() => handleRowClick(actor.actor_id)} style={{ cursor: 'default' }}>
             <td>{actor.actor_id}</td>
             <td>{actor.first_name} {actor.last_name}</td>
             <td>{actor.movies}</td>
