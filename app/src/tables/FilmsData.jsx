@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Table } from "antd";
 import axios from "axios";
 import Dropdown from "react-bootstrap/Dropdown";
-import Modal from "../components/modal/Modal";
+import { Button, Modal } from "antd";
 import RentFilmButton from "../components/button/RentFilmButton";
-import "./Dropdown.css";
+import "../styles/table.css";
 
 function FilmsData() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,6 +15,13 @@ function FilmsData() {
   const [films, setFilms] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const handleOk = () => {
+    setIsOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
   // console.log(filmData);
   // console.log(search)
   // console.log(filterChoice)
@@ -115,6 +122,7 @@ function FilmsData() {
         placeholder={"Search"}
       ></input>
       <Table
+        className=""
         loading={loading}
         columns={columns}
         dataSource={filteredFilms}
@@ -127,12 +135,11 @@ function FilmsData() {
           current: currentPage,
           onChange: (page, pageSize) => {
             setCurrentPage(page);
-            setLimit(pageSize);
             fetchRecords(page);
           },
         }}
       />
-      <Modal open={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal open={isOpen} onOk={handleOk} onCancel={handleCancel}>
         {filmData ? (
           <div>
             <h2>{filmData.title}</h2>
@@ -147,7 +154,7 @@ function FilmsData() {
             <p>Rental Rate: ${filmData.rental_rate}</p>
             <p>Replacement Cost: ${filmData.replacement_cost}</p>
             <p>Last Update: {filmData.last_update}</p>
-            <RentFilmButton filmID={filmData.film_id} />
+            <RentFilmButton filmID={filmData.film_id} isOpen={isOpen} />
           </div>
         ) : (
           <p>Loading...</p>

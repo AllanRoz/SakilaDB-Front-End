@@ -41,6 +41,7 @@ const ReturnFilmButton = ({ customerData }) => {
       <input
         type="text"
         id="returnFilm"
+        placeholder="Enter Film ID"
         value={filmId}
         onChange={(e) => setFilmId(e.target.value)}
       />

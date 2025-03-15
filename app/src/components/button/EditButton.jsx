@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Modal from "../modal/Modal";
+import { Modal } from "antd";
 import axios from "axios";
 
-function EditButton({ customer_id }) {
+function EditButton({ customer_id, customerEdit, setCustomerEdit }) {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -17,12 +17,17 @@ function EditButton({ customer_id }) {
   const [postalCode, setPostalCode] = useState("");
   const [country, setCountry] = useState("");
   const [phone, setPhone] = useState("");
+  const handleOk = () => {
+    setIsOpen(false);
+  };
 
+  const handleCancel = () => {
+    setIsOpen(false);
+    setCustomerEdit(false);
+  };
   useEffect(() => {
-    if (isOpen) {
-      fetchCustomerData();
-    }
-  }, [isOpen]);
+    fetchCustomerData();
+  }, []);
 
   const fetchCustomerData = async () => {
     try {
@@ -31,7 +36,7 @@ function EditButton({ customer_id }) {
         { customer_id }
       );
       const customer = response.data[0];
-      console.log(customer);
+      // console.log(customer);
       setFirstName(customer.first_name);
       setLastName(customer.last_name);
       setEmail(customer.email);
@@ -89,17 +94,12 @@ function EditButton({ customer_id }) {
         onClick={(e) => {
           e.stopPropagation();
           setIsOpen(true);
+          setCustomerEdit(true);
         }}
       >
         Edit
       </Button>
-      <Modal
-        open={isOpen}
-        onClose={(e) => {
-          e.stopPropagation();
-          setIsOpen(false);
-        }}
-      >
+      <Modal open={isOpen} onOk={handleOk} onCancel={handleCancel}>
         <h2>Edit Customer Details</h2>
         <Form>
           <Form.Group controlId="firstName">

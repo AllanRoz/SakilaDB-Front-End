@@ -1,0 +1,13 @@
+.ant-table-thead th,
+.ant-table-tbody td {
+  text-align: center !important;
+}
+.search-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-wrapper input {
+  margin-left: 10px;
+}

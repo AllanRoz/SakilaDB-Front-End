@@ -1,21 +1,30 @@
 import React, { useState, useEffect } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Table } from "antd";
-import Modal from "../components/modal/Modal";
+import { Button, Modal } from "antd";
 import ReturnFilmButton from "../components/button/ReturnFilmButton";
 import AddCustomerButton from "../components/button/AddCustomerButton";
 import axios from "axios";
 import EditButton from "../components/button/EditButton";
 import DeleteButton from "../components/button/DeleteButton";
+import "../styles/table.css";
 
 function CustomersData() {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const [filterChoice, setFilterChoice] = useState("");
   const [isCustomerOpen, setIsCustomerOpen] = useState(false);
+  const [customers, setCustomers] = useState([]);
   const [customerData, setCustomerData] = useState([]);
+  const [customerEdit, setCustomerEdit] = useState(false);
   const [loading, setLoading] = useState(false);
+  const handleOk = () => {
+    setIsCustomerOpen(false);
+  };
 
+  const handleCancel = () => {
+    setIsCustomerOpen(false);
+  };
   useEffect(() => {
     fetchRecords(currentPage);
   }, [search, filterChoice, currentPage]);
@@ -24,7 +33,7 @@ function CustomersData() {
     setLoading(true);
     try {
       const response = await axios.get(`http://127.0.0.1:8080/customers`);
-      setCustomerData(response.data || []);
+      setCustomers(response.data || []);
     } catch (error) {
       console.error("Error fetching customer data:", error);
     }
@@ -55,7 +64,11 @@ function CustomersData() {
     {
       title: "Edit",
       render: (_, record) => (
-        <EditButton customer_id={record.customer_id}></EditButton>
+        <EditButton
+          customer_id={record.customer_id}
+          customerEdit={customerEdit}
+          setCustomerEdit={setCustomerEdit}
+        ></EditButton>
       ),
     },
     {
@@ -83,47 +96,66 @@ function CustomersData() {
     return true;
   };
 
-  const filteredCustomerData = customerData.filter(searchChoice);
+  const filteredCustomers = customers.filter(searchChoice);
 
-  const handleRowClick = (customer_id) => {
+  const handleRowClick = async (customer_id) => {
     console.log("Fetching details for Customer ID:", customer_id);
+    try {
+      const response = await axios.post(
+        `http://127.0.0.1:8080/details/customerdata`,
+        { customer_id }
+      );
+      setCustomerData(response.data[0]);
+      // console.log(filmData);
+    } catch (error) {
+      console.error("Error fetching film details:", error);
+    }
+    setIsCustomerOpen(true);
   };
 
   return (
     <div>
-      <Dropdown>
-        <Dropdown.Toggle variant="success" id="dropdown-basic">
-          Filter: {filterChoice || "None"}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={() => setFilterChoice("Customer ID")}>
-            Customer ID
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => setFilterChoice("First Name")}>
-            First Name
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => setFilterChoice("Last Name")}>
-            Last Name
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => setFilterChoice("None")}>
-            None
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      <div className="search-wrapper">
+        <Dropdown>
+          <Dropdown.Toggle variant="success" id="dropdown-basic">
+            Filter: {filterChoice || "None"}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item onClick={() => setFilterChoice("Customer ID")}>
+              Customer ID
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => setFilterChoice("First Name")}>
+              First Name
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => setFilterChoice("Last Name")}>
+              Last Name
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => setFilterChoice("None")}>
+              None
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
 
-      <input
-        type={"text"}
-        id={"customerInput"}
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder={"Search"}
-      ></input>
+        <input
+          type={"text"}
+          id={"customerInput"}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={"Search"}
+        ></input>
+      </div>
       <Table
         loading={loading}
         columns={columns}
-        dataSource={filteredCustomerData}
+        dataSource={filteredCustomers}
         rowKey="customer_id"
         onRow={(record) => ({
-          onClick: () => handleRowClick(record.customer_id),
+          onClick: () => {
+            // console.log(customerEdit);
+            if (customerEdit) {
+              return;
+            }
+            handleRowClick(record.customer_id);
+          },
           style: { cursor: "pointer" },
         })}
         pagination={{
@@ -134,7 +166,7 @@ function CustomersData() {
           },
         }}
       />
-      <Modal open={isCustomerOpen} onClose={() => setIsCustomerOpen(false)}>
+      <Modal open={isCustomerOpen} onOk={handleOk} onCancel={handleCancel}>
         {customerData ? (
           <div>
             <h2>
@@ -144,6 +176,7 @@ function CustomersData() {
             <p>Email: {customerData.email}</p>
             <p>Address:</p>
             <p>{customerData.address}</p>
+            <p>{customerData.address2}</p>
             <p>
               {customerData.city}, {customerData.district},{" "}
               {customerData.postal_code}, {customerData.country}

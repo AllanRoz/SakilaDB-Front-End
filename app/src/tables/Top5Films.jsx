@@ -1,39 +1,38 @@
-import Modal from '../components/modal/Modal';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-
-const BUTTON_WRAPPER_STYLES = {
-  position: 'relative',
-  zIndex: 1
-}
-
-const OTHER_CONTENT_STYLES = {
-  position: 'relative',
-  zIndex: 2,
-  backgroundColor: 'red',
-  padding: '10px'
-}
+// import Modal from "../components/modal/Modal";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Button, Modal } from "antd";
 
 const Top5Films = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [films, setFilms] = useState([]) // Top 5 films
+  const [isOpen, setIsOpen] = useState(false);
+  const [films, setFilms] = useState([]); // Top 5 films
   const [selectedFilm, setSelectedFilm] = useState(null);
+  const handleOk = () => {
+    setIsOpen(false);
+  };
 
+  const handleCancel = () => {
+    setIsOpen(false);
+  };
   useEffect(() => {
-    ;(async () => {
-      const response = await axios.get("http://127.0.0.1:8080/top/rented_films")
-      setFilms(response.data)
-    })()
-  }, [])
+    (async () => {
+      const response = await axios.get(
+        "http://127.0.0.1:8080/top/rented_films"
+      );
+      setFilms(response.data);
+    })();
+  }, []);
   // console.log(films)
   const handleRowClick = async (film_id) => {
     //console.log('Fetching details for Film ID:', film_id);
     try {
-      const response = await axios.post(`http://127.0.0.1:8080/details/top5films`, {film_id});
+      const response = await axios.post(
+        `http://127.0.0.1:8080/details/top5films`,
+        { film_id }
+      );
       setSelectedFilm(response.data[0]); // Store the film details
     } catch (error) {
-      console.error('Error fetching film details:', error);
+      console.error("Error fetching film details:", error);
     }
     setIsOpen(true);
   };
@@ -52,16 +51,20 @@ const Top5Films = () => {
         </thead>
         <tbody>
           {films.map((film) => (
-          <tr key={film.film_id} onClick={() => handleRowClick(film.film_id)} style={{ cursor: 'default' }}>
-            <td>{film.film_id}</td>
-            <td>{film.title}</td>
-            <td>{film.rented}</td>
-          </tr>
+            <tr
+              key={film.film_id}
+              onClick={() => handleRowClick(film.film_id)}
+              style={{ cursor: "default" }}
+            >
+              <td>{film.film_id}</td>
+              <td>{film.title}</td>
+              <td>{film.rented}</td>
+            </tr>
           ))}
         </tbody>
       </table>
 
-      <Modal open={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal open={isOpen} onOk={handleOk} onCancel={handleCancel}>
         {selectedFilm ? (
           <div>
             <h2>{selectedFilm.title}</h2>
@@ -81,7 +84,7 @@ const Top5Films = () => {
         )}
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default Top5Films
+export default Top5Films;

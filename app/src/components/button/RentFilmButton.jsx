@@ -1,18 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const RentFilmButton = ({ filmID }) => {
+const RentFilmButton = ({ filmID, isOpen }) => {
   const [filmId, setFilmId] = useState(filmID);
   const [customerID, setCustomerID] = useState("");
   const [message, setMessage] = useState("");
   // console.log(filmID);
+  // console.log(isOpen);
 
   const checkFilmAvailability = async () => {
-    if (!filmId) {
-      alert("Please enter a valid Film ID");
-      return;
-    }
-
     const response = await axios.post(
       "http://127.0.0.1:8080/checkFilmAvailability",
       {
